@@ -1,0 +1,2 @@
+# django-blog
+study project
