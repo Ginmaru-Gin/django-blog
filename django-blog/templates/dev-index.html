@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+            Dev-index
+        {% endblock title %}
+    </title>
+    {% comment %} <link rel="stylesheet" href="{% static 'css/style.css' %}"> {% endcomment %}
+</head>
+<body>
+    <h1>{{ user_name }}</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'dev-index' %}">/DEV/</a></li>
+            <li><a href="/admin/">Админка</a></li>
+            <li><a href="{% url 'users:register' %}">Зарегистрироваться</a></li>
+            <li><a href="{% url 'users:login' %}">Войти</a></li>
+            <li><a href="{% url 'users:change_pass' %}">Изменить пароль</a></li>
+            <li><a href="{% url 'users:logout' %}">Выйти</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock content %}
+    </main>
+</body>
+</html>

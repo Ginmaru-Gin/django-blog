@@ -1,0 +1,14 @@
+{% extends "dev-index.html" %}
+
+{% block title %}
+    Регистрация
+{% endblock title %}
+
+{% block content %}
+    <h1>Регистрация</h1>
+    <form action="{% url 'users:register' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button>Подвердить</button>
+    </form>
+{% endblock content %}
