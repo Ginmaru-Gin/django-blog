@@ -12,6 +12,8 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
+from utils.utils import requestUsername
+
 
 def register(request) -> HttpResponse:
     if request.method == "POST":
@@ -19,10 +21,10 @@ def register(request) -> HttpResponse:
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect("users:login")
+            return redirect("/dev/")
     else:
         form = forms.UserCreationForm()
-    return render(request, "users/register.html", {"form": form})
+    return render(request, "users/register.html", {"form": form, "username": requestUsername(request)})
 
 
 def login(request) -> HttpResponse:
@@ -33,7 +35,7 @@ def login(request) -> HttpResponse:
             return redirect("/dev/")
     else:
         form = forms.AuthenticationForm()
-    return render(request, "users/login.html", {"form": form})
+    return render(request, "users/login.html", {"form": form, "username": requestUsername(request)})
 
 
 @login_required(login_url=reverse_lazy("dev"))
@@ -44,8 +46,6 @@ def logout(request) -> HttpResponse:
 
 @login_required(login_url=reverse_lazy("users:login"))
 def change_password(request) -> HttpResponse:
-    user = get_user(request)
-    user_name = "" if isinstance(user, AnonymousUser) else user.username
     if request.method == "POST":
         form = forms.PasswordChangeForm(request.user, data=request.POST)
         if form.is_valid():
@@ -56,5 +56,5 @@ def change_password(request) -> HttpResponse:
     else:
         form = forms.PasswordChangeForm(request.user)
     return render(
-        request, "users/change_password.html", {"form": form, "user_name": user_name}
+        request, "users/change_password.html", {"form": form, "username": requestUsername(request)}
     )
