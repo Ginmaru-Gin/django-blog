@@ -1,0 +1,18 @@
+{% extends "dev-index.html" %}
+
+{% block title %}
+    Все посты
+{% endblock title %}
+
+{% block content %}
+    <h2>Все посты</h2>
+    <ul>
+        {% for post in object_list %}
+            <li>
+                <h3>{{ post.header }}</h3>
+                <p>{{ post.text }}</p>
+                <p>{{ post.author }}, {{ post.date }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
