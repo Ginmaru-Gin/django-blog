@@ -34,7 +34,7 @@ class PostListView(ListView):
 
 
 @login_required(login_url=reverse_lazy("users:login"))
-def CreatePostView(request: HttpRequest):
+def create_post_view(request: HttpRequest):
     if request.method == "POST":
         form = CreatePostForm(request.POST)
         if form.is_valid():
