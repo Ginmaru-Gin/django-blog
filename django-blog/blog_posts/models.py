@@ -10,4 +10,4 @@ class Post(models.Model):
 
 
     def __str__(self):
-        return f"{self.header}\n{self.text}"
+        return f"{self.header} ({self.author})"

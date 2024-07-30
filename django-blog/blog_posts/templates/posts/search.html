@@ -1,0 +1,26 @@
+{% extends "dev-index.html" %}
+
+{% block title %}
+    Поиск постов
+{% endblock title %}
+
+{% block content %}
+    <h2>Поиск постов</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Найти">
+    </form>
+    {% if result %}
+        <h2>Результаты поиска</h2>
+    {% endif %}
+    <ul>
+        {% for post in result %}
+            <li>
+                <h3>{{ post.header }}</h3>
+                <p>{{ post.text }}</p>
+                <p>{{ post.author }}, {{ post.date }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
