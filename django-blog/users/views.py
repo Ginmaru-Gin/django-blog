@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import (
-    get_user,
+    forms,
     login as auth_login,
     logout as auth_logout,
     update_session_auth_hash,
 )
-import django.contrib.auth.forms as forms
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
@@ -24,7 +23,11 @@ def register(request) -> HttpResponse:
             return redirect("/dev/")
     else:
         form = forms.UserCreationForm()
-    return render(request, "users/register.html", {"form": form, "username": requestUsername(request)})
+    return render(
+        request,
+        "users/register.html",
+        {"form": form, "username": requestUsername(request)},
+    )
 
 
 def login(request) -> HttpResponse:
@@ -32,10 +35,12 @@ def login(request) -> HttpResponse:
         form = forms.AuthenticationForm(data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("/dev/")
-    else:
-        form = forms.AuthenticationForm()
-    return render(request, "users/login.html", {"form": form, "username": requestUsername(request)})
+            return redirect(request.GET.get("next", "posts:all"))
+    return render(
+        request,
+        "users/login.html",
+        {"form": forms.AuthenticationForm(), "username": requestUsername(request)},
+    )
 
 
 @login_required
@@ -56,5 +61,7 @@ def change_password(request) -> HttpResponse:
     else:
         form = forms.PasswordChangeForm(request.user)
     return render(
-        request, "users/change_password.html", {"form": form, "username": requestUsername(request)}
+        request,
+        "users/change_password.html",
+        {"form": form, "username": requestUsername(request)},
     )
