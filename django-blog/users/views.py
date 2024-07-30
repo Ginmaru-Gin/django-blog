@@ -38,13 +38,13 @@ def login(request) -> HttpResponse:
     return render(request, "users/login.html", {"form": form, "username": requestUsername(request)})
 
 
-@login_required(login_url=reverse_lazy("dev"))
+@login_required
 def logout(request) -> HttpResponse:
     auth_logout(request)
     return redirect(reverse("dev-index"))
 
 
-@login_required(login_url=reverse_lazy("users:login"))
+@login_required
 def change_password(request) -> HttpResponse:
     if request.method == "POST":
         form = forms.PasswordChangeForm(request.user, data=request.POST)

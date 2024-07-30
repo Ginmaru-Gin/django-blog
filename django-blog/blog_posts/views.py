@@ -2,7 +2,8 @@ from datetime import datetime
 from typing import Any
 from django.contrib.auth import get_user
 from django.contrib.auth.decorators import login_required
-from django.db.models.query import Q
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import Q, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -34,12 +35,21 @@ class PostListView(ListView):
         return context
 
 
-@login_required(login_url=reverse_lazy("users:login"))
+class UserPostListView(LoginRequiredMixin, PostListView):
+    template_name = "posts/user_post_list.html"
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.model.objects.filter(author__username=requestUsername(self.request))
+        print(f"{q=}")
+        return self.model.objects.filter(author__username=requestUsername(self.request)).order_by(self.ordering)
+
+
+@login_required
 def create_post_view(request: HttpRequest) -> HttpResponse:
     if request.method == "POST":
         form = CreatePostForm(request.POST)
         if form.is_valid():
-            post = Post.objects.create(
+            Post.objects.create(
                 header=form.cleaned_data.get("header"),
                 text=form.cleaned_data.get("text"),
                 author=get_user(request),
@@ -90,7 +100,6 @@ def search_post_view(request: HttpRequest) -> HttpResponse:
                 strict_lookup="exact",
                 nonstrict_lookup="icontains",
             )
-            print(f"{Qr=}")
             q = Post.objects.filter(Qr)
             return render(
                 request,
