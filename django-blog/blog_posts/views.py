@@ -11,6 +11,7 @@ from django.views.generic import DetailView, ListView
 from .models import Post
 from .forms import CreatePostForm, SearchPostForm
 
+
 from utils.utils import requestUsername
 
 
@@ -18,21 +19,11 @@ from utils.utils import requestUsername
 class PostView(DetailView):
     model = Post
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["username"] = requestUsername(self.request)
-        return context
-
 
 class PostListView(ListView):
     model = Post
     template_name = "posts/all_list.html"
     ordering = "-date"
-
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super().get_context_data(**kwargs)
-        context["username"] = requestUsername(self.request)
-        return context
 
 
 class UserPostListView(LoginRequiredMixin, PostListView):
@@ -41,7 +32,9 @@ class UserPostListView(LoginRequiredMixin, PostListView):
     def get_queryset(self) -> QuerySet[Any]:
         q = self.model.objects.filter(author__username=requestUsername(self.request))
         print(f"{q=}")
-        return self.model.objects.filter(author__username=requestUsername(self.request)).order_by(self.ordering)
+        return self.model.objects.filter(
+            author__username=requestUsername(self.request)
+        ).order_by(self.ordering)
 
 
 @login_required
@@ -61,7 +54,7 @@ def create_post_view(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "posts/create-post.html",
-        {"form": form, "username": requestUsername(request)},
+        {"form": form},
     )
 
 
@@ -106,7 +99,6 @@ def search_post_view(request: HttpRequest) -> HttpResponse:
                 "posts/search.html",
                 {
                     "form": SearchPostForm(),
-                    "username": requestUsername(request),
                     "result": q,
                 },
             )
@@ -114,12 +106,12 @@ def search_post_view(request: HttpRequest) -> HttpResponse:
             return render(
                 request,
                 "posts/search.html",
-                {"form": SearchPostForm(), "username": requestUsername(request)},
+                {"form": SearchPostForm()},
             )
 
     else:
         return render(
             request,
             "posts/search.html",
-            {"form": SearchPostForm(), "username": requestUsername(request)},
+            {"form": SearchPostForm()},
         )

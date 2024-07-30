@@ -11,8 +11,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 
-from utils.utils import requestUsername
-
 
 def register(request) -> HttpResponse:
     if request.method == "POST":
@@ -26,7 +24,7 @@ def register(request) -> HttpResponse:
     return render(
         request,
         "users/register.html",
-        {"form": form, "username": requestUsername(request)},
+        {"form": form},
     )
 
 
@@ -35,11 +33,11 @@ def login(request) -> HttpResponse:
         form = forms.AuthenticationForm(data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect(request.GET.get("next", "posts:all"))
+            return redirect(request.GET.get("next", reverse("dev-index")))
     return render(
         request,
         "users/login.html",
-        {"form": forms.AuthenticationForm(), "username": requestUsername(request)},
+        {"form": forms.AuthenticationForm()},
     )
 
 
@@ -63,5 +61,5 @@ def change_password(request) -> HttpResponse:
     return render(
         request,
         "users/change_password.html",
-        {"form": form, "username": requestUsername(request)},
+        {"form": form},
     )
