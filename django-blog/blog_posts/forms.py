@@ -17,6 +17,18 @@ class SearchPostForm(forms.Form):
         required=False,
         widget=forms.Textarea(),
     )
+    strict_author = forms.BooleanField(label="Точное соответствие", required=False)
+    strict_header = forms.BooleanField(label="Точное соответствие", required=False)
+    strict_text = forms.BooleanField(label="Точное соответствие", required=False)
+
+    field_order = [
+        "author",
+        "strict_author",
+        "header",
+        "strict_header",
+        "text",
+        "strict_text",
+    ]
 
     def clean(self):
         if not self.has_changed():
