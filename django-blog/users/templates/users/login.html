@@ -7,7 +7,7 @@
 
 {% block content %}
     <h1>Вход</h1>
-    <form action="{% url 'users:login' %}?next={{ request.GET.next }}" method="post">
+    <form action="{% url 'users:login' %}{% if next %}?next={{ request.GET.next }}{% endif %}" method="post">
         {% csrf_token %}
         {{ form }}
         <button>Войти</button>
