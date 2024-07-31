@@ -19,7 +19,7 @@ def dev_index(request: HttpRequest):
     if request.user.is_authenticated:
         options.update(
             {
-                "Мои посты": "posts:user",
+                "Мои посты": "posts:my-posts",
                 "Новый пост": "posts:create",
                 "Изменить пароль": "users:change_pass",
                 "Выйти": "users:logout",

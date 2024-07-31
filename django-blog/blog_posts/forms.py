@@ -34,3 +34,7 @@ class SearchPostForm(forms.Form):
         if not self.has_changed():
             pass
             raise ValidationError(_("All searching fields are emtpy!"))
+
+
+class CreateCommentForm(forms.Form):
+    text = forms.CharField(label="Текст", max_length=200, widget=forms.Textarea())

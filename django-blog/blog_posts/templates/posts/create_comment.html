@@ -1,0 +1,28 @@
+{% extends "dev-index.html" %}
+
+{% block title %}
+    Новый комментарий
+{% endblock title %}
+
+{% block content %}
+    <h3><a href="{% url "posts:post" pk=post.id %}">{{ post.header }}</a></h3>
+    <p>{{ post.text }}</p>
+    <p><i><b><a href="{% url "posts:user" pk=post.author.pk %}">{{ post.author }}</a></b>, {{ post.date }}</i></p>
+    <h4>Оставить комментарий</h4>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Опубликовать">
+    </form>
+    <ul>
+        {% for comment in comments %}
+            {% if comment.post == post %}
+                <li>
+                    <p>{{comment.text}}</p>
+                    <p><i><b><a href="{% url "posts:user" pk=comment.author.pk %}">{{ comment.author }}</a></b>, {{ comment.date }}</i></p>
+                </li>
+            {% endif %}
+            
+        {% endfor %}
+    </ul>
+{% endblock %}

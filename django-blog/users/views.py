@@ -55,7 +55,7 @@ def change_password(request) -> HttpResponse:
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, "Пароль изменён!")
-            return redirect(reverse("dev"))
+            return redirect(reverse("dev-index"))
     else:
         form = forms.PasswordChangeForm(request.user)
     return render(

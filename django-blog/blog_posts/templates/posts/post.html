@@ -1,0 +1,25 @@
+{% extends "dev-index.html" %}
+
+{% block title %}
+    {{ post.header }}
+{% endblock title %}
+
+{% block content %}
+    <h3>{{ post.header }}</h3>
+    <p>{{ post.text }}</p>
+    <p><i><b><a href="{% url "posts:user" pk=post.author.pk %}">{{ post.author }}</a></b>, {{ post.date }}</i></p>
+    <form action="{% url "posts:new-comment" post_id=post.id %}">
+        <input type="submit" value="Комментировать">
+    </form>
+    <ul>
+        {% for comment in comments %}
+            {% if comment.post == post %}
+                <li>
+                    <p>{{comment.text}}</p>
+                    <p><i><b><a href="{% url "posts:user" pk=comment.author.pk %}">{{ comment.author }}</a></b>, {{ comment.date }}</i></p>
+                </li>
+            {% endif %}
+            
+        {% endfor %}
+    </ul>
+{% endblock %}

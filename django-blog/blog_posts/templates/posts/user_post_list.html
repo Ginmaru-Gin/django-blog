@@ -1,17 +1,30 @@
 {% extends "dev-index.html" %}
 
 {% block title %}
-    Мои посты
+    Посты пользователя
 {% endblock title %}
 
 {% block content %}
-    <h2>Мои посты</h2>
+    <h2>Посты пользователя {{ object_list.0.author }}</h2>
     <ul>
         {% for post in object_list %}
             <li>
-                <h3>{{ post.header }}</h3>
+                <h3><a href="{% url "posts:post" pk=post.id %}">{{ post.header }}</a></h3>
                 <p>{{ post.text }}</p>
-                <p>{{ post.author }}, {{ post.date }}</p>
+                <p><i><b><a href="{% url "posts:user" pk=post.author.pk %}">{{ post.author }}</a></b>, {{ post.date }}</i></p>
+                <form action="{% url "posts:new-comment" post_id=post.id %}">
+                    <input type="submit" value="Комментировать">
+                </form>
+                <ul>
+                    {% for comment in comments %}
+                        {% if comment.post == post %}
+                            <li>
+                                <p>{{comment.text}}</p>
+                                <p><i><b><a href="{% url "posts:user" pk=comment.author.pk %}">{{ comment.author }}</a></b>, {{ comment.date }}</i></p>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             </li>
         {% endfor %}
     </ul>
