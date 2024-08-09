@@ -5,11 +5,19 @@ from django.contrib.auth import (
     logout as auth_logout,
     update_session_auth_hash,
 )
-from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import AnonymousUser, Group, User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
+from rest_framework import permissions, viewsets
+from .serializers import UserSerializer
+
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all().order_by("-date_joined")
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 def register(request) -> HttpResponse:

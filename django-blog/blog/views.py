@@ -32,7 +32,7 @@ def dev_index(request: HttpRequest):
                 "Зарегистрироваться": "users:register",
             }
         )
-    options = [Option("Админка", "/admin/")] + [
+    options = [Option("Админка", "/admin/"), Option("API", "/api/")] + [
         Option(k, reverse(v)) for k, v in options.items()
     ]
     return render(

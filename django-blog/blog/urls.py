@@ -17,10 +17,22 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework import routers
+
 from . import views
+import users.views
+import blog_posts.views
+
+router = routers.DefaultRouter()
+router.register("users", users.views.UserViewSet, basename="user")
+router.register("posts", blog_posts.views.PostViewSet, basename="post")
+router.register("comments", blog_posts.views.CommentViewSet, basename="comment")
 
 urlpatterns = [
+    path("api/", include(router.urls)),
+    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("admin/", admin.site.urls, name="admin"),
+    path("", views.dev_index, name="dev-index"),
     path("dev/", views.dev_index, name="dev-index"),
     path("users/", include("users.urls"), name="users"),
     path("posts/", include("blog_posts.urls"), name="posts"),

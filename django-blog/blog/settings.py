@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "blog_posts.apps.BlogPostsConfig",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -131,3 +132,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Other settings
 LOGIN_URL = reverse_lazy("users:login")
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}

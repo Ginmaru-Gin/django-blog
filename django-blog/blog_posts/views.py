@@ -8,11 +8,22 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.generic import DetailView, ListView
-from .models import Post, Comment
+from rest_framework import viewsets, permissions
 from .forms import CreatePostForm, SearchPostForm, CreateCommentForm
+from .models import Post, Comment
+from .serializers import PostSerializer, CommentSerializer
 
 
-from utils.utils import requestUsername
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all().order_by("-date")
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by("-date")
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class PostView(DetailView):

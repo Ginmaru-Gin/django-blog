@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Post(models.Model):
     header = models.CharField(max_length=80, default="")
     text = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     date = models.DateTimeField()
 
 
@@ -15,8 +15,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     text = models.TextField()
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     date = models.DateTimeField()
 
     def __str__(self):
